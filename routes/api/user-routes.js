@@ -1,24 +1,22 @@
 const router = require('express').Router();
-const { UserModel } = require('../../models');
+const {
+    getUsers,
+    createUser,
+    updateUser,
+    deleteUser,
+    addFriend,
+    deleteFriend
+} = require('../../controllers/userController.js');
 
-// GET all users
-// api/user/all
-router.post('/', async (req, res) => {
-    try {
-        const newUser = await UserModel.find({})
-        console.log();
-        res.json(newUser)
+// api/users
+router.route('/')
+    .get(getUsers) // GET all users
+    .post(createUser) // create a user
 
-    } catch(err) {
-        console.error(err);
-        res.status(500).json(err);
-    }
-})
-
-
-// POST create a new user
-// api/user/create-new
-router.post('/', async (req, res) => {
+router.route('/:userId')
+    .put(updateUser)
+    .delete(deleteUser)
+// router.post('/', async (req, res) => {
     // try {
     //     const newUser = await UserModel.find({firstname:})
 
@@ -26,12 +24,17 @@ router.post('/', async (req, res) => {
     //     console.error(err);
     //     res.status(500).json(err);
     // }
-})
+// })
 
 
-// UPDATE
-// api/user/update/:userId
+// UPDATE, DELETE
+// api/users/:userId
 
 
-// DELETE
-// api/user/delete/:userId
+
+// api/users/:userId/frineds/:friendId
+// TODO: POST new friend to a user's friend list
+// TODO: DELETE a friend from a user's friend list
+
+
+module.exports = router;

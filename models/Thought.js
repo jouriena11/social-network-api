@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 const reactionSchema = require('./Reaction');
+const reactionCount = require('../controllers/thoughtController');
+const timestampFormat = require('../controllers/dateController');
 
 const thoughtSchema = new Schema(
     {
@@ -22,6 +24,7 @@ const thoughtSchema = new Schema(
     {
         toJSON: {
             getters: true,
+            virtuals: true
         }
     }
 );
@@ -30,10 +33,10 @@ thoughtSchema.virtual('formattedCreatedAt').get(function() { // a regular functi
     return timestampFormat(this.createdAt);
 });
 
+thoughtSchema.virtual('reactionCount').get(function() {
+    return reactionCount(this.reactions);
+});
+
 const Thought = model('thought', thoughtSchema);
 
 module.exports = Thought;
-
-
-
-
