@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {
     getUsers,
+    getUserById,
     createUser,
     updateUser,
     deleteUser,
@@ -14,6 +15,7 @@ router.route('/')
     .post(createUser) // create a user
 
 router.route('/:userId')
+    .get(getUserById)
     .put(updateUser)
     .delete(deleteUser)
 // router.post('/', async (req, res) => {

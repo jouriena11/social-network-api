@@ -1,31 +1,30 @@
 const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require('../models');
 
-console.log('User ->', User)
-
-// TODO: how to include friendCount in getUsers()
-async function friendCount() {
-    User.aggregate() // aggregate() function is used to perform complex data analysis and manipulations on the documents in a collection, e.g. grouping, filtering, sorting, and transforming data in MongoDB.
-        .count('friendCount')
-        .then((numberOfFriends) => numberOfFriends);
-}
-
-// userSchema.virtual('friendCount').get(async function() {
-//     const count = await friendCount(this.friends);
-//     return count;
-// })
-
 // GET all users
 async function getUsers(req, res) {
     try {
         const users = await User.find();
-        const friendCountValue = await friendCount(); // TODO: friendCount() isn't working
         
-        const userObj = {
-            users,
-            friendCount: friendCountValue
+        res.status(200).json(users);
+
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({message: err.message});
+    }
+};
+
+// GET a user by _id
+// api/users/:userId
+async function getUserById(req, res) {
+    try {
+        const user = await User.findOne({_id: req.params.userId});
+
+        if(!user) {
+            return res.status(404).json({message: 'User not found'});
         };
-        return res.json(userObj);
+
+        res.status(200).json(user);
 
     } catch(err) {
         console.error(err);
@@ -37,7 +36,7 @@ async function getUsers(req, res) {
 // api/users
 async function createUser(req, res) {
     try {
-        const newUser = await User.create(req.body);
+        const newUser = await User.create(req.body); 
         res.status(201).json(newUser);
     } catch(err) {
         console.error(err);
@@ -117,6 +116,7 @@ async function deleteFriend(req, res) {
 
 module.exports = {
     getUsers,
+    getUserById,
     createUser,
     updateUser,
     deleteUser,

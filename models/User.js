@@ -1,8 +1,5 @@
-// const mongoose = require('mongoose');
-// const Schema = mongoose.Schema;
-
 const { Schema, model } = require('mongoose');
-const Thoughts = require('./Thought');
+const Thought = require('./Thought');
 
 const userSchema = new Schema(
     {
@@ -29,7 +26,7 @@ const userSchema = new Schema(
                 ref: 'Thought'
             }
         ],
-        friends: [
+        friends: [ // []
             {
                 type: Schema.Types.ObjectId,
                 ref: 'User'
@@ -44,16 +41,20 @@ const userSchema = new Schema(
     }
 )
 
-// TODO: Is this correct?
 userSchema.pre('remove', async function(next) {
     try {
-        await Thoughts.deleteMany({_id: this.ObjectId});
+        await Thought.deleteMany({_id: this.ObjectId});
         next();
 
     } catch(err) {
         next(err);
     }
-})
+});
+
+userSchema.virtual('friendCount').get(function() {
+    const count = this.friends.length;
+    return count;
+});
 
 const User = model('User', userSchema);
 

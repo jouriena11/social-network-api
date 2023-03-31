@@ -1,5 +1,5 @@
-const { Schema } = require('mongoose');
-const timestampFormat = require('../controllers/dateController');
+const { Schema, Types } = require('mongoose');
+const timestampFormat = require('./getter/dateFormat');
 
 const reactionSchema = new Schema(
     {
@@ -19,6 +19,7 @@ const reactionSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now(),
+            get: timestampFormat
         }
     },
     {
@@ -27,10 +28,6 @@ const reactionSchema = new Schema(
         }
     }
 );
-
-reactionSchema.virtual('formattedCreatedAt').get(function() { // a regular function must be used here to bind `this` to the instance of the model; an arrow function wouldn't work as it would refer to the parent scope, which is likely a global 'undefined' object
-    return timestampFormat(this.createdAt);
-});
 
 // As reactionSchema is used as a subdocument in thoughtSchema, it's not necessary to create a separate model for it, as you wouldn't need a collection (i.e. table) for subdocuments.
 

@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
 const reactionSchema = require('./Reaction');
-const reactionCount = require('../controllers/thoughtController');
-const timestampFormat = require('../controllers/dateController');
+const timestampFormat = require('./getter/dateFormat');
 
 const thoughtSchema = new Schema(
     {
@@ -14,6 +13,7 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now(),
+            get: timestampFormat
         },
         username: {
             type: String,
@@ -29,12 +29,8 @@ const thoughtSchema = new Schema(
     }
 );
 
-thoughtSchema.virtual('formattedCreatedAt').get(function() { // a regular function must be used here to bind `this` to the instance of the model; an arrow function wouldn't work as it would refer to the parent scope, which is likely a global 'undefined' object
-    return timestampFormat(this.createdAt);
-});
-
 thoughtSchema.virtual('reactionCount').get(function() {
-    return reactionCount(this.reactions);
+    return this.reactions.length;
 });
 
 const Thought = model('thought', thoughtSchema);
