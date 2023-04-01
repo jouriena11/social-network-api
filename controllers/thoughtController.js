@@ -1,4 +1,5 @@
 const { User, Thought } = require('../models');
+const { findOneAndUpdate } = require('../models/Thought');
 
 // api/thoughts/:thoughtId
 // GET a single thought by its '_id'
@@ -45,7 +46,9 @@ async function createThought(req, res) {
 
         const newThought = await Thought.create(req.body);
         
-        associatedUser.thoughts.push(newThought);
+        associatedUser.thoughts.push(newThought._id);
+
+        await associatedUser.save();
 
         res.status(201).json(newThought);
 
@@ -128,16 +131,33 @@ async function createReaction(req, res) {
     }   
 };
 
-
-// TODO: DELETE a reaction by reactionId
-async function deleteReaction() {
+// api/thoughts/:thoughtId/reactions/:reactionId
+// DELETE a reaction by reactionId
+async function deleteReaction(req, res) {
+    const { thoughtId, reactionId } = req.params;
     try {
-        
+
+        const thought = await Thought.findOneAndUpdate(
+            { _id: thoughtId },
+            { $pull: {reactions: {reactionId: reactionId}}},
+            { new: true }
+        );
+
+        if(!thought) {
+            return res.status(404).json({message: 'Thought not found'});
+        };
+
+        if(!reactionId) {
+            return res.status(404).json({message: 'Reaction not found'});
+        }
+
+        res.status(200).json(thought);
+
     } catch(err) {
         console.error(err);
         res.status(500).json({message: err.message});
-    }   
-}
+    }
+};
 
 module.exports = {
     getThoughts,

@@ -26,7 +26,7 @@ const userSchema = new Schema(
                 ref: 'Thought'
             }
         ],
-        friends: [ // []
+        friends: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'User'
@@ -41,9 +41,10 @@ const userSchema = new Schema(
     }
 )
 
+// TODO: fix bug - associated thought record still persists
 userSchema.pre('remove', async function(next) {
     try {
-        await Thought.deleteMany({_id: this.ObjectId});
+        await Thought.deleteMany({username: this.username});
         next();
 
     } catch(err) {

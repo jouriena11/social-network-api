@@ -40,3 +40,5 @@ npm i
 ---
 ## **Future Development**
 - to include password in User model
+- to use userId instead of username (despite the username being set to 'unique')
+- to consider having a Friend model as a junction table, connecting the User model and Friends for scalability and better performance, instead of self-referencing.

@@ -21,9 +21,12 @@ router.route('/:thoughtId')
     .delete(deleteThought)
 
 // api/thoughts/:thoughtId/reactions
-router.route('/:thoughtId/reactions')
-    .post(createReaction) // create a reaction stored in a single thought's `reactions` array
-    .delete(deleteReaction)
+// create a reaction stored in a single thought's `reactions` array
+router.route('/:thoughtId/reactions').post(createReaction)
+
+// api/thoughts/:thoughtId/reactions/:reactionId
+// delete a reaction by reactionId
+router.route('/:thoughtId/reactions/:reactionId').delete(deleteReaction)
 
 
 

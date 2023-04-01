@@ -36,7 +36,7 @@ async function getUserById(req, res) {
 // api/users
 async function createUser(req, res) {
     try {
-        const newUser = await User.create(req.body); 
+        const newUser = await User.create(req.body);
         res.status(201).json(newUser);
     } catch(err) {
         console.error(err);
@@ -68,9 +68,7 @@ async function deleteUser(req, res) {
 
         if(!delUser) {
             return res.status(404).json({ message: 'No user found'})
-        } else {
-            // TODO: delete associated thoughts and reactions
-        };
+        }
 
         res.status(200).json({ message: "The user has been deleted."})
 
@@ -82,7 +80,7 @@ async function deleteUser(req, res) {
 
 // api/users/:userId/frineds/:friendId
 // POST new friend to a user's friend list
-async function addFriend(req, res) {
+async function addFriend(req, res) { 
     const { userId, friendId } = req.params;
     try {
         const user = await User.findById(userId);
@@ -104,10 +102,22 @@ async function addFriend(req, res) {
 }
 
 // api/users/:userId/frineds/:friendId
-// DELETE a friend from a user's friend list
+// PUT a user
 async function deleteFriend(req, res) {
+    const { userId, friendId } = req.params;
     try {
-        
+        const user = await User.findOneAndUpdate(
+            { _id: userId },
+            { $pull: {friends: friendId} },
+            { new: true } 
+        );
+
+        if(!user) {
+            return res.status(404).json({message: 'User not found'});
+        };
+
+        res.status(200).json(user);
+
     } catch(err) {
         console.error(err);
         res.status(500).json({message: err.message});
