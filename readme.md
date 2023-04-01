@@ -1,7 +1,13 @@
 # **Social Media API**
 
 ## **Project Description**
-MongoDB, Mongoose
+The purpose of this project is to build an API for a social media application, where users can do the following:
+- create, update, and delete their user account
+- share their thoughts (i.e. similar to Facebook post), update their thoughts (i.e. edit), and delete their thoughts
+- add friends to their friend list
+- react to their friends' thoughts (i.e. similar to Facebook comments).
+
+Data is to be stored in MongoDB, and Mongoose is used to interact with the database.
 
 ---
 ## **URLs**
@@ -18,7 +24,8 @@ MongoDB, Mongoose
 ---
 ## **Installation**
 The following npm libraries must be installed to run this application:
-
+- express v4.18.2
+- mongoose v6.9.2
 
 The installations can be done conveniently by the running the following command line at the root directory: 
 ```
@@ -31,7 +38,8 @@ npm i
 - Node.js
 - Express.js
 - MongoDB
-- Mongoose
+- Mongoose library
+- Insomnia
 
 ---
 ## **Usage**

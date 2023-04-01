@@ -35,9 +35,6 @@ async function getThoughts(req, res) {
 // POST a new thought + push created thoughts '_id' to the associated user's thoughts array
 async function createThought(req, res) {
     try {
-        console.log('req.body.username -> ', req.body.username)
-        console.log(User);
-        console.log(Thought);
         const associatedUser = await User.findOne({ username: req.body.username });
         
         if(!associatedUser) {

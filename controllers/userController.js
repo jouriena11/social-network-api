@@ -64,6 +64,11 @@ async function updateUser(req, res) {
 // api/users/:userId
 async function deleteUser(req, res) {
     try {
+        const user = await User.findById(req.params.userId);
+        const username = user.username;
+        console.log('username -> ', username);
+        const delThought = await Thought.deleteMany({username: username})
+        console.log('delThought -> ', delThought)
         const delUser = await User.deleteOne({ _id: req.params.userId });
 
         if(!delUser) {
