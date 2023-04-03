@@ -42,16 +42,16 @@ const userSchema = new Schema(
 )
 
 // TODO: fix bug - associated thought record still persists
-userSchema.pre('remove', async function(next) {
-    try {
-        console.log('Deleting associated thought')
-        await Thought.deleteMany({username: this.username});
-        next();
+// userSchema.pre('remove', async function(next) {
+//     try {
+//         console.log('Deleting associated thought')
+//         await Thought.deleteMany({username: this.username});
+//         next();
 
-    } catch(err) {
-        next(err);
-    }
-});
+//     } catch(err) {
+//         next(err);
+//     }
+// });
 
 userSchema.virtual('friendCount').get(function() {
     const count = this.friends.length;
